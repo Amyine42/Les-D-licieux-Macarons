@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Les Délicieux Macarons</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+  <div class="container text-center my-4">
+    <h1 class="mb-4 text-success">Les Délicieux Macarons</h1>
+    <div class="row">
+      {% for macaron in macarons %}
+        <div class="col-md-4 mb-4">
+          <div class="card shadow-sm">
+            <img src="{{ url_for('static', filename='images/' + macaron.image) }}" class="card-img-top" alt="{{ macaron.name }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ macaron.name }}</h5>
+              <p class="card-text">${{ macaron.price }}</p>
+              <a href="{{ url_for('add_to_cart', macaron_id=macaron.id) }}" class="btn btn-success">Add to Cart</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <a href="{{ url_for('cart') }}" class="btn btn-outline-primary mt-3">View Cart</a>
+  </div>
+</body>
+</html>
