@@ -18,7 +18,7 @@
         {% endfor %}
       </ul>
       <h4 class="text-end">Total: ${{ total }}</h4>
-      <form method="post" action="{{ url_for('order') }}" class="mt-4">
+      <form method="post" action="{{ url_for('order_page') }}" class="mt-4">
         <div class="mb-3">
           <label for="name" class="form-label">Your Name</label>
           <input type="text" name="name" id="name" class="form-control" required>
