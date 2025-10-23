@@ -35,7 +35,7 @@ with app.app_context():
 
 # --- Routes ---
 @app.route("/")
-def home():
+def index():
     return render_template("index.html", macarons=MACARONS)
 
 @app.route("/add_to_cart/<int:macaron_id>")
