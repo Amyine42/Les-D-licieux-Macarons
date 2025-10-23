@@ -29,8 +29,8 @@ MACARONS = [
     {"id": 3, "name": "Raspberry", "price": 2.6, "image": "raspberry.jpg"},
 ]
 
-@app.before_first_request
-def create_tables():
+# ✅ Crée les tables au démarrage
+with app.app_context():
     db.create_all()
 
 @app.route("/")
