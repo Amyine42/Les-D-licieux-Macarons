@@ -33,6 +33,7 @@ MACARONS = [
 with app.app_context():
     db.create_all()
 
+# --- Routes ---
 @app.route("/")
 def home():
     return render_template("index.html", macarons=MACARONS)
@@ -47,30 +48,33 @@ def add_to_cart(macaron_id):
     return redirect(url_for("home"))
 
 @app.route("/cart")
-def cart():
+def cart_page():
     cart = session.get("cart", [])
     total = sum(m["price"] for m in cart)
     return render_template("cart.html", cart=cart, total=total)
 
-@app.route("/checkout", methods=["POST"])
-def checkout():
-    name = request.form["name"]
-    address = request.form["address"]
-    cart = session.get("cart", [])
-    total = sum(m["price"] for m in cart)
-    
-    # Sauvegarde en base
-    order = Order(
-        customer_name=name,
-        address=address,
-        items=str(cart),
-        total=total
-    )
-    db.session.add(order)
-    db.session.commit()
-    
-    session["cart"] = []
-    return render_template("order_success.html", name=name, total=total)
+@app.route("/order", methods=["GET", "POST"])
+def order_page():
+    if request.method == "POST":
+        name = request.form["name"]
+        address = request.form["address"]
+        cart = session.get("cart", [])
+        total = sum(m["price"] for m in cart)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)
+        # Sauvegarde en base
+        order = Order(
+            customer_name=name,
+            address=address,
+            items=str(cart),
+            total=total
+        )
+        db.session.add(order)
+        db.session.commit()
+
+        # Vide le panier
+        session["cart"] = []
+
+        # Retour à la page order.html avec succès
+        return render_template("order.html", success=True, name=name, total=total)
+
+    return render_template("order.html")
